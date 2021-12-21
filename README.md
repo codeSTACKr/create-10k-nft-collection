@@ -2,8 +2,8 @@
 
 ## Multiple Active Branches 
 
-- main = Source code from the video
-- fix-uploads-mints = Updated to fix issues uploading files, metadata, and minting explained [below](#quota-limit-reached-or-too-many-requests-errors).
+- [main](https://github.com/codeSTACKr/video-source-code-create-nft-collection/tree/main) = Source code from the video
+- [fix-uploads-mints](https://github.com/codeSTACKr/video-source-code-create-nft-collection/tree/fix-uploads-mints) = Updated to fix issues uploading files, metadata, and minting explained [below](#quota-limit-reached-or-too-many-requests-errors).
 
 [Video Link](https://youtu.be/AaCgydeMu64)
 
@@ -42,15 +42,16 @@ Ensure that your layer names in the `config.js` file match exactly to your layer
 
 ### "Quota Limit Reached" or "Too many requests" errors
 
-There have been some changes made to the code resulting from some errors when uploading files, metadata, and minting using NFTPort. Depending on your plan, Free vs Community, there are rate limits. 
+There have been some changes made to the code in the [fix-uploads-mints](https://github.com/codeSTACKr/video-source-code-create-nft-collection/tree/fix-uploads-mints) branch resulting from some errors when uploading files, metadata, and minting using NFTPort. Depending on your plan, Free vs Community, there are rate limits. 
 
-To fix these issues, I've updated the code to include a timeout that will allow the files to be uploaded at a slower rate, instead of all at once. 
+To fix these issues, I've updated the code to include a timeout that will allow the files to be uploaded at a slower rate, instead of all at once, eliminating these errors.  
 
 **To use this code:**
 
-- Clone this repo or download the zip file for the fix-uploads-mints branch.
+- Clone this repo or download the zip file.
 - Unzip, if needed, and open the folder in VS Code.
 - From the terminal type: 
   - `npm install`
+- Ensure you are on the `fix-uploads-mints` branch.
 - Copy your image layers into the `layers` folder.
 - Use the `src/config.js` file to set up your layers and NFT information.
