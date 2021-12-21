@@ -24,7 +24,6 @@ async function main() {
       }
     }
   }
-  writeFile();
 }
 
 main();
