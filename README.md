@@ -11,6 +11,8 @@ Base code is from [hashlips_art_engine](https://github.com/HashLips/hashlips_art
 
 Minting uses [NFTPort](https://nftport.xyz)
 
+Join the Discord server for more help from the community: [codeSTACKr Discord](https://discord.gg/A9CnsVzzkZ)
+
 ## UPDATES & FIXES
 
 ### npm not recognized
