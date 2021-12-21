@@ -55,3 +55,5 @@ To fix these issues, I've updated the code to include a timeout that will allow 
 - Ensure you are on the `fix-uploads-mints` branch if you cloned the repo.
 - Copy your image layers into the `layers` folder.
 - Use the `src/config.js` file to set up your layers and NFT information.
+
+## Reference the [video](https://youtu.be/AaCgydeMu64) for more details. All commands to upload and mint are the same. 
