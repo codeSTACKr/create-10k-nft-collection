@@ -52,6 +52,6 @@ To fix these issues, I've updated the code to include a timeout that will allow 
 - Unzip, if needed, and open the folder in VS Code.
 - From the terminal type: 
   - `npm install`
-- Ensure you are on the `fix-uploads-mints` branch.
+- Ensure you are on the `fix-uploads-mints` branch if you cloned the repo.
 - Copy your image layers into the `layers` folder.
 - Use the `src/config.js` file to set up your layers and NFT information.
