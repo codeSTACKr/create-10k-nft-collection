@@ -7,12 +7,13 @@ let fileCount = fs.readdirSync(readDir).length - 2;
 const AUTH = 'YOUR API KEY HERE';
 const TIMEOUT = 1000; // Milliseconds. Extend this if needed to wait for each upload. 1000 = 1 second.
 
+fs.writeFileSync(`${basePath}/build/json/_ipfsMetas.json`, "");
+const writter = fs.createWriteStream(`${basePath}/build/json/_ipfsMetas.json`, {
+  flags: "a",
+});
+writter.write("[");
+
 async function main() {
-  fs.writeFileSync(`${basePath}/build/json/_ipfsMetas.json`, "");
-  const writter = fs.createWriteStream(`${basePath}/build/json/_ipfsMetas.json`, {
-    flags: "a",
-  });
-  writter.write("[");
   const files = fs.readdirSync(readDir);
   for (const file of files) {
     if (file !== "_metadata.json" && file !== "_ipfsMetas.json") {
