@@ -1,23 +1,39 @@
 const fetch = require("node-fetch");
-
-const path = require("path");
-const isLocal = typeof process.pkg === "undefined";
-const basePath = isLocal ? process.cwd() : path.dirname(process.execPath);
+const basePath = process.cwd();
 const fs = require("fs");
+const readDir = `${basePath}/build/json`;
+let fileCount = fs.readdirSync(readDir).length - 2;
 
 const AUTH = 'YOUR API KEY HERE';
+const TIMEOUT = 1000; // Milliseconds. Extend this if needed to wait for each upload. 1000 = 1 second.
 
-fs.writeFileSync(`${basePath}/build/json/_ipfsMetas.json`, "");
-const writter = fs.createWriteStream(`${basePath}/build/json/_ipfsMetas.json`, {
-  flags: "a",
-});
-writter.write("[");
-const readDir = `${basePath}/build/json`;
-fileCount = fs.readdirSync(readDir).length - 2;
+async function main() {
+  fs.writeFileSync(`${basePath}/build/json/_ipfsMetas.json`, "");
+  const writter = fs.createWriteStream(`${basePath}/build/json/_ipfsMetas.json`, {
+    flags: "a",
+  });
+  writter.write("[");
+  const files = fs.readdirSync(readDir);
+  for (const file of files) {
+    if (file !== "_metadata.json" && file !== "_ipfsMetas.json") {
+      try {
+        await uploadMeta(file)
+      } catch(err) {
+        console.log(`Catch: ${err}`)
+      }
+    }
+  }
+  writeFile();
+}
 
-fs.readdirSync(readDir).forEach((file) => {
-  if (file === "_metadata.json" || file === "_ipfsMetas.json") return;
+main();
 
+function timer(ms) {
+  return new Promise(res => setTimeout(res, ms));
+}
+
+async function uploadMeta(file)  {
+  await timer(TIMEOUT);
   const jsonFile = fs.readFileSync(`${readDir}/${file}`);
 
   let url = "https://api.nftport.xyz/v0/metadata";
@@ -46,4 +62,4 @@ fs.readdirSync(readDir).forEach((file) => {
       console.log(`${json.name} metadata uploaded & added to _ipfsMetas.json`);
     })
     .catch((err) => console.error("error:" + err));
-});
+}

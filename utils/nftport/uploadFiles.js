@@ -1,14 +1,27 @@
 const FormData = require("form-data");
 const fetch = require("node-fetch");
-
 const path = require("path");
-const isLocal = typeof process.pkg === "undefined";
-const basePath = isLocal ? process.cwd() : path.dirname(process.execPath);
+const basePath = process.cwd();
 const fs = require("fs");
 
 const AUTH = 'YOUR API KEY HERE';
+const TIMEOUT = 1000; // Milliseconds. Extend this if needed to wait for each upload. 1000 = 1 second.
 
-fs.readdirSync(`${basePath}/build/images`).forEach((file) => {
+async function main() {
+  const files = fs.readdirSync(`${basePath}/build/images`);
+  for (const file of files) {
+    await uploadFile(file);
+  }
+}
+
+main();
+
+function timer(ms) {
+  return new Promise(res => setTimeout(res, ms));
+}
+
+async function uploadFile(file) {
+  await timer(TIMEOUT);
   const formData = new FormData();
   const fileStream = fs.createReadStream(`${basePath}/build/images/${file}`);
   formData.append("file", fileStream);
@@ -39,4 +52,4 @@ fs.readdirSync(`${basePath}/build/images`).forEach((file) => {
       console.log(`${json.file_name} uploaded & ${fileName}.json updated!`);
     })
     .catch((err) => console.error("error:" + err));
-});
+  }
