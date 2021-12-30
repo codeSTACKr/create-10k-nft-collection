@@ -17,7 +17,7 @@ Join the Discord server for more help from the community: [codeSTACKr Discord](h
 
 ### npm not recognized
 
-You have not installed [node.js](https://nodejs.org) properly. Be sure to follow the installation instructions from their download page for your specific operating system. 
+You have not installed [node.js](https://nodejs.org) properly. Be sure to follow the installation instructions from their download page for your specific operating system. And restart your computer after installation.
 
 ### Images not lining up
 
@@ -40,7 +40,7 @@ Fortunately, it's an easy fix. Just type these commands into the terminal:
 
 ### Any sort of "path" error
 
-Ensure that your layer names in the `config.js` file match exactly to your layer folder names.
+Ensure that your layer names in the `config.js` file match exactly to your layer folder names. Also, remove any `-` (hyphens) from your file names.
 
 ### "Quota Limit Reached" or "Too many requests" errors
 
