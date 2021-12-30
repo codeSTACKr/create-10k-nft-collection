@@ -22,7 +22,7 @@ async function main() {
     });
     for (const file of files) {
       if (file !== "_metadata.json" && file !== "_ipfsMetas.json") {
-        let jsonFile = fs.readFileSync(`${basePath}/build/json/${file}`);
+        let jsonFile = fs.readFileSync(`${readDir}/${file}`);
         let metaData = JSON.parse(jsonFile);
   
         const uploadedMeta = ipfsMetas.find(item => {
