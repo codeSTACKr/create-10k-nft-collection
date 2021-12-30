@@ -3,9 +3,12 @@ const path = require("path");
 const basePath = process.cwd();
 const fs = require("fs");
 
-const AUTH = 'YOUR API KEY HERE';
-const CONTRACT_ADDRESS = 'YOUR CONTRACT ADDRESS HERE';
-const MINT_TO_ADDRESS = 'YOUR WALLET ADDRESS HERE';
+// const AUTH = 'YOUR API KEY HERE';
+// const CONTRACT_ADDRESS = 'YOUR CONTRACT ADDRESS HERE';
+// const MINT_TO_ADDRESS = 'YOUR WALLET ADDRESS HERE';
+const AUTH = '7073fd40-9443-4f5f-8eac-ba9030b7051a';
+const CONTRACT_ADDRESS = '0x862b11c9d9ed5e566d41ffa848cbcfdefcd183db';
+const MINT_TO_ADDRESS = '0xB7422Da1890Ce24309b4670792a1D5E5A6D32F38';
 const CHAIN = 'rinkeby';
 const TIMEOUT = 1000; // Milliseconds. This a timeout for errors only. If there is an error, it will wait then try again. 5000 = 5 seconds.
 
@@ -20,11 +23,14 @@ async function main() {
 
   for (const meta of ipfsMetas) {
     const mintFile = `${basePath}/build/minted/${meta.custom_fields.edition}.json`;
-    
+
     try {
       fs.accessSync(mintFile);
-      const meta = JSON.parse(mintFile)
-      if(meta.mintData.response !== "OK") throw 'not minted'
+      const mintedFile = fs.readFileSync(mintFile)
+      if(mintedFile.length > 0) {
+        const mintedMeta = JSON.parse(mintedFile)
+        if(mintedMeta.mintData.response !== "OK") throw 'not minted'
+      }
       console.log(`${meta.name} already minted`);
     } catch(err) {
       try {
