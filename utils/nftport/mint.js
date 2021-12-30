@@ -23,6 +23,8 @@ async function main() {
     
     try {
       fs.accessSync(mintFile);
+      const meta = JSON.parse(mintFile)
+      if(meta.mintData.response !== "OK") throw 'not minted'
       console.log(`${meta.name} already minted`);
     } catch(err) {
       try {
