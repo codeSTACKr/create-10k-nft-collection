@@ -1,6 +1,6 @@
 {
   "name": "10k-collection-video",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "Source code from \"How To Create An ENTIRE NFT Collection (10,000+) & MINT In Under 1 Hour Without Coding Knowledge\" video.",
   "main": "index.js",
   "bin": "index.js",
