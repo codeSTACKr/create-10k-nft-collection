@@ -20,9 +20,14 @@ async function main() {
 
   for (const meta of ipfsMetas) {
     const mintFile = `${basePath}/build/minted/${meta.custom_fields.edition}.json`;
-    
+
     try {
       fs.accessSync(mintFile);
+      const mintedFile = fs.readFileSync(mintFile)
+      if(mintedFile.length > 0) {
+        const mintedMeta = JSON.parse(mintedFile)
+        if(mintedMeta.mintData.response !== "OK") throw 'not minted'
+      }
       console.log(`${meta.name} already minted`);
     } catch(err) {
       try {
