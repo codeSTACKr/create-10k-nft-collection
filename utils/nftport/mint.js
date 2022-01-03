@@ -15,7 +15,7 @@ if (!fs.existsSync(path.join(`${basePath}/build`, "/minted"))) {
 
 async function main() {
   const ipfsMetas = JSON.parse(
-    fs.readFileSync(`${basePath}/build/json/_ipfsMetas.json`)
+    fs.readFileSync(`${basePath}/build/ipfsMetas/_ipfsMetas.json`)
   );
 
   for (const meta of ipfsMetas) {

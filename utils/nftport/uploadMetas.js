@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const path = require("path");
 const basePath = process.cwd();
 const fs = require("fs");
 const readDir = `${basePath}/build/json`; // change this directory if you are uploading generic images first in order to do a reveal.
@@ -8,46 +9,48 @@ const TIMEOUT = 1000; // Milliseconds. Extend this if needed to wait for each up
 
 const allMetadata = [];
 
+if (!fs.existsSync(path.join(`${basePath}/build`, "/ipfsMetas"))) {
+  fs.mkdirSync(path.join(`${basePath}/build`, "ipfsMetas"));
+}
+
 async function main() {
-  const ipfsMetasFile = `${basePath}/build/json/_ipfsMetas.json`;
-  fs.access(ipfsMetasFile, fs.F_OK, async (err) => {
-    if (err) {
-      fs.writeFileSync(ipfsMetasFile, "[]")
-    }
-  
-    const ipfsMetas = JSON.parse(fs.readFileSync(ipfsMetasFile));
-    const files = fs.readdirSync(readDir);
-    files.sort(function(a, b){
-      return a.split(".")[0] - b.split(".")[0];
-    });
-    for (const file of files) {
-      if (file !== "_metadata.json" && file !== "_ipfsMetas.json") {
-        let jsonFile = fs.readFileSync(`${readDir}/${file}`);
-        let metaData = JSON.parse(jsonFile);
-  
-        const uploadedMeta = ipfsMetas.find(item => {
-          return item.custom_fields.edition === metaData.custom_fields.edition;
-        })
-  
-        if(!uploadedMeta) {
-          try {
-            const response = await fetchWithRetry(jsonFile);
-            allMetadata.push(response);
-            console.log(`${response.name} metadata uploaded!`);
-          } catch(err) {
-            console.log(`Catch: ${err}`)
-          }
+  const files = fs.readdirSync(readDir);
+  files.sort(function(a, b){
+    return a.split(".")[0] - b.split(".")[0];
+  });
+  for (const file of files) {
+    if (file !== "_metadata.json" && file !== "_ipfsMetas.json") {
+      let jsonFile = fs.readFileSync(`${readDir}/${file}`);
+      let metaData = JSON.parse(jsonFile);
+      const uploadedMeta = `${basePath}/build/ipfsMetas/${metaData.custom_fields.edition}.json`;
+
+      try {
+        fs.accessSync(uploadedMeta);
+        const uploadedMetaFile = fs.readFileSync(uploadedMeta)
+        if(uploadedMetaFile.length > 0) {
+          const ipfsMeta = JSON.parse(uploadedMetaFile)
+          if(ipfsMeta.response !== "OK") throw 'metadata not uploaded'
+          allMetadata.push(ipfsMeta);
+          console.log(`${metaData.name} metadata already uploaded`);
         } else {
-          allMetadata.push(uploadedMeta);
-          console.log(`${uploadedMeta.name} metadata already uploaded`);
+          throw 'metadata not uploaded'
+        }
+      } catch(err) {
+        try {
+          const response = await fetchWithRetry(jsonFile);
+          allMetadata.push(response);
+          writeResponseMetaData(response)
+          console.log(`${response.name} metadata uploaded!`);
+        } catch(err) {
+          console.log(`Catch: ${err}`)
         }
       }
     }
     fs.writeFileSync(
-      `${basePath}/build/json/_ipfsMetas.json`,
+      `${basePath}/build/ipfsMetas/_ipfsMetas.json`,
       JSON.stringify(allMetadata, null, 2)
     );
-  })
+  }
 }
 
 main();
@@ -103,3 +106,7 @@ async function fetchWithRetry(file)  {
     return fetch_retry(file);
   });
 }
+
+const writeResponseMetaData = (_data) => {
+  fs.writeFileSync(`${basePath}/build/ipfsMetas/${_data.custom_fields.edition}.json`, JSON.stringify(_data, null, 2));
+};
