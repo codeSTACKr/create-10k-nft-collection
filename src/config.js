@@ -79,7 +79,7 @@ const background = {
 };
 
 const extraMetadata = {
-  external_url: "https://codecats.xyz",
+  external_url: "https://codecats.xyz", // Replace with your website or remove this line if you do not have one.
 };
 
 const rarityDelimiter = "#";
