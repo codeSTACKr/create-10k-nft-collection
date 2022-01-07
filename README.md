@@ -1,6 +1,8 @@
 # Source Code from "How To Create An ENTIRE NFT Collection (10,000+) & MINT In Under 1 Hour Without Coding Knowledge"
 
-Video: [How To Create An ENTIRE NFT Collection (10,000+) & MINT In Under 1 Hour Without Coding Knowledge](https://youtu.be/AaCgydeMu64)
+Video 1: [How To Create An ENTIRE NFT Collection (10,000+) & MINT In Under 1 Hour Without Coding Knowledge](https://youtu.be/AaCgydeMu64)
+
+Video 2: [How To List & Reveal An ENTIRE NFT Collection (10,000+) Without Coding Knowledge on OpenSea](https://youtu.be/Iy1n_LxUwZs)
 
 Original video code: [v0.1.0-alpha](https://github.com/codeSTACKr/video-source-code-create-nft-collection/releases/tag/v0.1.0-alpha)
 
@@ -9,6 +11,8 @@ Base code is from [hashlips_art_engine](https://github.com/HashLips/hashlips_art
 Minting uses [NFTPort](https://nftport.xyz)
 
 Join the Discord server for more help from the community: [codeSTACKr Discord](https://discord.gg/A9CnsVzzkZ)
+
+The macro script from the second video: [macro1.mmmacro](macro1.mmmacro)
 
 ## UPDATES & FIXES
 

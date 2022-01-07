@@ -3,6 +3,9 @@ const basePath = process.cwd();
 const fs = require("fs");
 const buildDir = path.join(basePath, "/build");
 
+const GENERIC_TITLE = "Unknown" // Replace with what you want the generic titles to say.
+const GENERIC_DESCRIPTION = "Unknown" // Replace with what you want the generic descriptions to say.
+
 if (!fs.existsSync(path.join(buildDir, "/genericJson"))) {
   fs.mkdirSync(path.join(buildDir, "/genericJson"));
 }
@@ -12,8 +15,8 @@ fs.readdirSync(`${buildDir}/json`).forEach((file) => {
 
   const jsonFile = JSON.parse(fs.readFileSync(`${buildDir}/json/${file}`));
 
-  jsonFile.name = "Unknown";
-  jsonFile.description = "Unknown";
+  jsonFile.name = `${GENERIC_TITLE} #${jsonFile.custom_fields.edition}`;
+  jsonFile.description = GENERIC_DESCRIPTION;
   jsonFile.file_url =
     "https://ipfs.io/ipfs/QmUf9tDbkqnfHkQaMdFWSGAeXwVXWA61pFED7ypx4hcsfh";
     // This is an example url, replace with yours.
