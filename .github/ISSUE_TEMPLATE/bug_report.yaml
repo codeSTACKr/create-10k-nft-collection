@@ -21,7 +21,7 @@ body:
     id: general
     attributes:
       label: General Question
-      description: Is this a general usage question? If so, visit the [discord server](https://discord.gg/A9CnsVzzkZ)
+      description: Is this a general usage question? If so, visit the [discord server](https://discord.gg/A9CnsVzzkZ).
       options:
       - label: "No"
         required: true
@@ -39,7 +39,7 @@ body:
   - type: textarea
     id: troubleshoot
     attributes:
-      label: What have you tired?
+      label: What have you tried?
       description: What steps have you taken to find a solution?
       placeholder: Tell us what you've done!
       value: "A bug happened!"
