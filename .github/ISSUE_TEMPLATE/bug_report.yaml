@@ -13,7 +13,7 @@ body:
       label: Version
       description: Are you using the latest version of this repository?
       options:
-      - label: Yes
+      - label: "Yes"
         required: true
     validations:
       required: true
@@ -23,7 +23,7 @@ body:
       label: General Question
       description: Is this a general usage question?
       options:
-      - label: No
+      - label: "No"
         required: true
     validations:
       required: true
