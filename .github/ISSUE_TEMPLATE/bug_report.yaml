@@ -42,7 +42,7 @@ body:
       label: What have you tried?
       description: What steps have you taken to find a solution?
       placeholder: Tell us what you've done!
-      value: "A bug happened!"
+      value: "I Googled and asked the community in the discord server but could not find a solution."
     validations:
       required: true
   - type: textarea
@@ -51,3 +51,13 @@ body:
       label: Relevant log output
       description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
       render: shell
+  - type: checkboxes
+    id: ppi
+    attributes:
+      label: Protect your information
+      description: I have not included any personal information in this form.
+      options:
+      - label: "I Agree"
+        required: true
+    validations:
+      required: true
