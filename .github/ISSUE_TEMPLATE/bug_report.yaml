@@ -23,7 +23,7 @@ body:
       label: General Question
       description: Is this a general usage question?
       options:
-        - label: No
+      - label: No
         required: true
     validations:
       required: true
