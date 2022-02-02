@@ -18,7 +18,7 @@ The macro script from the second video: [macro1.mmmacro](macro1.mmmacro)
 
 ### npm not recognized
 
-You have not installed [node.js](https://nodejs.org) properly. Be sure to follow the installation instructions from their download page for your specific operating system. And restart your computer after installation.
+You have not installed [node.js](https://nodejs.org) properly (* and or if you're using a M1 on macs you'll need to downgrade your current version of node.js to v14 for it to work*). Be sure to follow the installation instructions from their download page for your specific operating system. And restart your computer after installation. 
 
 ### Images not lining up
 
