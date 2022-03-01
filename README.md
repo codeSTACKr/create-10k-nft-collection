@@ -14,6 +14,8 @@ Join the Discord server for more help from the community: [codeSTACKr Discord](h
 
 The macro script from the second video: [macro1.mmmacro](macro1.mmmacro)
 
+UPDATE: Added rarity calculator. See this [video](https://youtu.be/Uz1y4j9gvP8) for the walkthrough.
+
 ## UPDATES & FIXES
 
 ### npm not recognized
@@ -45,9 +47,11 @@ Ensure that your layer names in the `config.js` file match exactly to your layer
 
 ### "Quota Limit Reached" or "Too many requests" errors
 
-There have been some changes made to the code from the original video resulting from some errors when uploading files, metadata, and minting using NFTPort. Depending on your plan, Free vs Community, there are rate limits. 
+There have been some changes made to the code from the original video resulting from some errors when uploading files, metadata, and minting using NFTPort. Depending on your plan, Free vs Community, there are rate limits.
 
-To fix these issues, I've updated the code to include a timeout that will allow the files to be uploaded at a slower rate, instead of all at once, eliminating these errors.  
+To fix these issues, I've updated the code to include a timeout that will allow the files to be uploaded at a slower rate, instead of all at once, eliminating these errors.
+
+If you've reached your quota limit, contact NFTPort to upgrade your plan to get more. 
 
 **To use this code:**
 
