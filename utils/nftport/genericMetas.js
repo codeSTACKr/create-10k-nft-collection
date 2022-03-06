@@ -3,30 +3,40 @@ const basePath = process.cwd();
 const fs = require("fs");
 const buildDir = path.join(basePath, "/build");
 
-const GENERIC_TITLE = "Unknown" // Replace with what you want the generic titles to say.
-const GENERIC_DESCRIPTION = "Unknown" // Replace with what you want the generic descriptions to say.
+const {
+  GENERIC_TITLE,
+  GENERIC_DESCRIPTION,
+  GENERIC_IMAGE,
+} = require(`${basePath}/src/config.js`);
 
 if (!fs.existsSync(path.join(buildDir, "/genericJson"))) {
   fs.mkdirSync(path.join(buildDir, "/genericJson"));
 }
 
-fs.readdirSync(`${buildDir}/json`).forEach((file) => {
-  if (file === "_metadata.json" || file === "_ipfsMetas.json") return;
+let rawdata = fs.readFileSync(`${buildDir}/json/_metadata.json`);
+let data = JSON.parse(rawdata);
 
-  const jsonFile = JSON.parse(fs.readFileSync(`${buildDir}/json/${file}`));
+console.log("Starting generic metadata creation.");
 
-  jsonFile.name = `${GENERIC_TITLE} #${jsonFile.custom_fields.edition}`;
-  jsonFile.description = GENERIC_DESCRIPTION;
-  jsonFile.file_url =
-    "https://ipfs.io/ipfs/QmUf9tDbkqnfHkQaMdFWSGAeXwVXWA61pFED7ypx4hcsfh";
-    // This is an example url, replace with yours.
-  delete jsonFile.attributes;
-  delete jsonFile.custom_fields.dna;
+for (let item in data) {
+  const genericImage = GENERIC_IMAGE[Math.floor(Math.random() * GENERIC_IMAGE.length)];
+  item.name = `${GENERIC_TITLE} #${item.custom_fields.edition}`;
+  item.description = GENERIC_DESCRIPTION;
+  item.file_url = genericImage;
+  delete item.attributes;
+  delete item.custom_fields.dna;
 
   fs.writeFileSync(
-    `${buildDir}/genericJson/${file}`,
-    JSON.stringify(jsonFile, null, 2)
+    `${buildDir}/genericJson/${item}`,
+    JSON.stringify(item, null, 2)
   );
 
-  console.log(`${file} copied and updated!`);
-});
+  console.log(`${item} copied and updated!`);
+}
+
+fs.writeFileSync(
+  `${buildDir}/genericJson/_metadata.json`,
+  JSON.stringify(data, null, 2)
+);
+
+console.log("Generic metadata created!");

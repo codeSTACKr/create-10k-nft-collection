@@ -1,7 +1,7 @@
 {
   "name": "10k-collection-video",
-  "version": "1.2.0",
-  "description": "Source code from \"How To Create An ENTIRE NFT Collection (10,000+) & MINT In Under 1 Hour Without Coding Knowledge\" video.",
+  "version": "2.0.0",
+  "description": "How To Create An ENTIRE NFT Collection (10,000+) & MINT",
   "main": "index.js",
   "bin": "index.js",
   "pkg": {
@@ -14,21 +14,30 @@
   "scripts": {
     "build": "node index.js",
     "generate": "node index.js",
-    "rarity": "node utils/rarity.js",
-    "rarity_md": "node utils/getRarity_fromMetadata.js",
+    "rarity": "node utils/rarity",
+    "rarity_md": "node utils/getRarity_fromMetadata",
     "rarity_rank": "node utils/rarity_rank.js",
     "preview": "node utils/preview.js",
     "pixelate": "node utils/pixelate.js",
     "update_info": "node utils/update_info.js",
-    "preview_gif": "node utils/preview_gif.js"
+    "preview_gif": "node utils/preview_gif.js",
+    "create_generic": "node utils/genericMetas",
+    "deploy_contract": "node utils/deployContract",
+    "get_contract": "node utils/retrieveContract",
+    "mint": "node utils/mint $npm_config_start $npm_config_end",
+    "check_txns": "node utils/checkTxns $npm_config_dir",
+    "refresh_os": "node utils/refreshOpensea $npm_config_start $npm_config_end"
   },
   "author": "Jesse Hall (codeSTACKr)",
   "license": "MIT",
   "dependencies": {
+    "async-sema": "^3.1.1",
     "canvas": "^2.8.0",
     "form-data": "^4.0.0",
     "gif-encoder-2": "^1.0.5",
     "node-fetch": "^2.6.6",
-    "sha1": "^1.1.1"
+    "puppeteer": "^13.4.1",
+    "sha1": "^1.1.1",
+    "yesno": "^0.3.1"
   }
 }

@@ -131,12 +131,13 @@ const addMetadata = (_dna, _edition) => {
     name: `${namePrefix} #${_edition}`,
     description: description,
     file_url: `${baseUri}/${_edition}.png`,
+    image: `${baseUri}/${_edition}.png`,
     attributes: attributesList,
     custom_fields: {
       dna: sha1(_dna),
       edition: _edition,
       date: dateTime,
-      compiler: "HashLips Art Engine",
+      compiler: "HashLips Art Engine - codeSTACKr Modified",
     },
     ...extraMetadata,
   };
