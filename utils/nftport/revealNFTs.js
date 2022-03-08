@@ -6,8 +6,8 @@ const { RateLimit } = require("async-sema");
 const {
   fetchWithRetry,
 } = require(`${basePath}/utils/functions/fetchWithRetry.js`);
+const { txnCheck } = require(`${basePath}/utils/functions/txnCheck.js`);
 const {
-  AUTH,
   CONTRACT_ADDRESS,
   MINT_TO_ADDRESS,
   CHAIN,
@@ -17,17 +17,10 @@ const {
 } = require(`${basePath}/src/config.js`);
 const _limit = RateLimit(LIMIT);
 let [START, END] = process.argv.slice(2);
-
-if(CHAIN === 'rinkeby') {
-  console.log('Rinkeby is not supported for checking ownership of NFTs.');
-  process.exit(1);
-}
+START = parseInt(START);
+END = parseInt(END);
 
 const ownedNFTs = [];
-
-if (!fs.existsSync(path.join(`${basePath}/build`, "/revealed"))) {
-  fs.mkdirSync(path.join(`${basePath}/build`, "revealed"));
-}
 
 async function checkOwnedNFTs() {
   try {
@@ -38,7 +31,6 @@ async function checkOwnedNFTs() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: AUTH,
       },
     };
 
@@ -62,12 +54,15 @@ async function checkOwnedNFTs() {
     console.log(`Catch: Error: ${error}`);
   }
 
+  console.log(`Found ${ownedNFTs.length} owned NFTs.`);
+  console.log(`Revealing unowned NFTs...`);
   reveal();
 }
 
 async function reveal() {
-  console.log(`Found ${ownedNFTs.length} owned NFTs.`);
-  console.log(`Revealing unowned NFTs...`);
+  if (!fs.existsSync(path.join(`${basePath}/build`, "/revealed"))) {
+    fs.mkdirSync(path.join(`${basePath}/build`, "revealed"));
+  }
   const ipfsMetas = JSON.parse(
     fs.readFileSync(`${basePath}/build/ipfsMetas/_ipfsMetas.json`)
   );
@@ -75,11 +70,11 @@ async function reveal() {
     const edition = meta.custom_fields.edition;
     if (START && END) {
       if (edition < START || edition > END) {
-        return;
+        continue;
       }
     } else if (START) {
-      if (edition !== START) {
-        return;
+      if (edition < START) {
+        continue;
       }
     }
     if (!ownedNFTs.includes(edition)) {
@@ -89,9 +84,34 @@ async function reveal() {
         const revealedFile = fs.readFileSync(revealedFilePath);
         if (revealedFile.length > 0) {
           const revealedFileJson = JSON.parse(revealedFile);
-          if (revealedFileJson.updateData.response !== "OK")
+          if (revealedFileJson.updateData.response !== "OK" || revealedFileJson.updateData.error !== null) {
             throw "not revealed";
-          console.log(`${meta.name} already revealed`);
+          } else if(revealedFileJson.updateData.transaction_verified === true) {
+            console.log(`${meta.name} already revealed.`);
+          } else {
+            let check = await txnCheck(
+              revealedFileJson.updateData.transaction_external_url
+            );
+            if (check.includes("Success")) {
+              revealedFileJson.updateData.transaction_verified = true;
+              fs.writeFileSync(revealedFilePath,JSON.stringify(revealedFileJson, null, 2));
+              console.log(`${meta.name} already revealed.`);
+            } else if (check.includes("Fail")) {
+              console.log(
+                `Transaction failed or not found, will retry revealing Edition #${edition}`
+              );
+              throw `Transaction failed, will retry revealing Edition #${edition}`;
+            } else if(check.includes("Pending")) {
+              console.log(
+                `Transaction transaction still pending for Edition #${edition}`
+              );
+            } else {
+              console.log(
+                `Transaction unknown, please manually check Edition #${edition}`,
+                `Directory: ${mintFile}`
+              );
+            }
+          }
         } else {
           throw "not revealed";
         }
@@ -99,31 +119,30 @@ async function reveal() {
         let  ok = true;
         if (REVEAL_PROMPT) {
           ok = await yesno({
-            question: `Reveal ${meta.name}?`,
+            question: `Reveal ${meta.name}? (y/n):`,
             default: null,
           });
         }
         if (ok) {
           try {
-            let url = "https://api.nftport.xyz/v0/mints/customizable";
-
+            await _limit();
+            const url = "https://api.nftport.xyz/v0/mints/customizable";
             const updateInfo = {
               chain: CHAIN.toLowerCase(),
               contract_address: CONTRACT_ADDRESS,
               metadata_uri: meta.metadata_uri,
               token_id: meta.custom_fields.edition,
             };
+            const options = {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(updateInfo),
+            };
+            let updateData = await fetchWithRetry(url, options);
 
-            await _limit();
-
-            let updateData = await fetchWithRetry(
-              JSON.stringify(updateInfo),
-              url,
-              "PUT"
-            );
-
-            console.log(`Updated transaction created: ${meta.name}`);
-
+            
             const combinedData = {
               metaData: meta,
               updateData: updateData,
@@ -131,11 +150,13 @@ async function reveal() {
             fs.writeFileSync(
               `${basePath}/build/revealed/${meta.custom_fields.edition}.json`,
               JSON.stringify(combinedData, null, 2)
-            );
-            console.log(`Updated: ${meta.name}`);
+              );
+            console.log(`Updated transaction created for ${meta.name}`);
           } catch (err) {
             console.log(err);
           }
+        } else {
+          console.log(`Skipped: ${meta.name}`);
         }
       }
     }
@@ -144,12 +165,21 @@ async function reveal() {
     console.log(
       `Done revealing! Will run again in ${INTERVAL / 1000 / 60} minutes`
     );
+  } else {
+    console.log(
+      `Done revealing!`
+    );
   }
+  console.log("To check for errors run command: npm run check_txns --dir=revealed");
 }
 
 if (START) {
   reveal();
 } else {
+  if(CHAIN === 'rinkeby') {
+    console.log('Rinkeby is not supported for checking ownership of NFTs.');
+    process.exit(1);
+  }
   setInterval(checkOwnedNFTs, INTERVAL);
   checkOwnedNFTs();
 }

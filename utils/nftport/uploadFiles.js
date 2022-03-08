@@ -27,10 +27,16 @@ async function main() {
 
         if(!metaData.file_url.includes('https://')) {
           await _limit()
-          const fileStream = fs.createReadStream(`${basePath}/build/images/${file}`);
+          const url = "https://api.nftport.xyz/v0/files";
           const formData = new FormData();
+          const fileStream = fs.createReadStream(`${basePath}/build/images/${file}`);
           formData.append("file", fileStream);
-          const response = await fetchWithRetry(formData, "https://api.nftport.xyz/v0/files", "POST");
+          const options = {
+            method: "POST",
+            headers: {},
+            body: formData,
+          };
+          const response = await fetchWithRetry(url, options);
           metaData.file_url = response.ipfs_url;
           metaData.image = response.ipfs_url;
 

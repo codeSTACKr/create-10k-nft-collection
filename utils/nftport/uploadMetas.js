@@ -9,8 +9,7 @@ const { LIMIT, GENERIC } = require(`${basePath}/src/config.js`);
 const _limit = RateLimit(LIMIT);
 
 const regex = new RegExp("^([0-9]+).json$");
-
-const allMetadata = [];
+let genericUploaded = false;
 
 if (!fs.existsSync(path.join(`${basePath}/build`, "/ipfsMetas"))) {
   fs.mkdirSync(path.join(`${basePath}/build`, "ipfsMetas"));
@@ -20,7 +19,8 @@ let readDir = `${basePath}/build/json`;
 let writeDir = `${basePath}/build/ipfsMetas`;
 
 async function main() {
-  console.log("Starting upload of metadata...");
+  console.log(`Starting upload of ${GENERIC ? genericUploaded ? 'generic ' : '' : ''}metadata...`);
+  const allMetadata = [];
   const files = fs.readdirSync(readDir);
   files.sort(function (a, b) {
     return a.split(".")[0] - b.split(".")[0];
@@ -45,7 +45,15 @@ async function main() {
       } catch (err) {
         try {
           await _limit();
-          const response = await fetchWithRetry(jsonFile, 'https://api.nftport.xyz/v0/metadata', "POST");
+          const url = "https://api.nftport.xyz/v0/metadata";
+          const options = {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: jsonFile,
+          };
+          const response = await fetchWithRetry(url, options);
           allMetadata.push(response);
           fs.writeFileSync(uploadedMeta, JSON.stringify(response, null, 2));
           console.log(`${response.name} metadata uploaded!`);
@@ -61,14 +69,14 @@ async function main() {
   }
 
   // Upload Generic Metadata if GENERIC is true
-  if (GENERIC) {
+  if (GENERIC && !genericUploaded) {
     if (!fs.existsSync(path.join(`${basePath}/build`, "/ipfsMetasGeneric"))) {
       fs.mkdirSync(path.join(`${basePath}/build`, "ipfsMetasGeneric"));
     }
     readDir = `${basePath}/build/genericJson`;
     writeDir = `${basePath}/build/ipfsMetasGeneric`;
     
-    console.log("Starting upload of generic metadata...");
+    genericUploaded = true;
     main();
   }
 }

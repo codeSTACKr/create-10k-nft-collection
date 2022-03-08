@@ -1,35 +1,29 @@
-const fetch = require("node-fetch");
+const puppeteer = require("puppeteer-extra");
+const StealthPlugin = require("puppeteer-extra-plugin-stealth");
+puppeteer.use(StealthPlugin());
+const AdblockerPlugin = require("puppeteer-extra-plugin-adblocker");
+puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
 
 async function txnCheck(url) {
-  return new Promise((resolve, reject) => {
-    const options = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    fetch(url, options)
-      .then((response) => {
-        return response.text();
-      })
-      .then((text) => {
-        if (
-          text.toLowerCase().includes("search not found") ||
-          text.toLowerCase().includes("</i>fail</span>") ||
-          text.toLowerCase().includes("</i>failed</span>")
-        ) {
-          resolve('Failed');
-        } else if (text.toLowerCase().includes("</i>success</span>")) {
-          resolve('Success');
-        } else {
-          resolve('Unknown');
-        }
-      })
-      .catch((err) => {
-        console.error("error:" + err);
-        reject(err);
-      });
+  return new Promise(async (resolve, reject) => {
+    const browser = await puppeteer.launch({
+      headless: false,
+    });
+    const page = await browser.newPage();
+    const session = await page.target().createCDPSession();
+    const {windowId} = await session.send('Browser.getWindowForTarget');
+    await session.send('Browser.setWindowBounds', {windowId, bounds: {windowState: 'minimized'}});
+    await page.goto(url);
+    await page.waitForSelector("#ContentPlaceHolder1_maintable");
+    
+    try {
+      let cardText = await page.$eval("#ContentPlaceHolder1_maintable .row:nth-child(4) div:nth-child(2)", (text) => text.textContent);
+      await browser.close();
+      resolve(cardText);
+    } catch (error) {
+      await browser.close();
+      resolve("Unknown");
+    }
   });
 }
 

@@ -1,17 +1,11 @@
+const basePath = process.cwd();
 const fetch = require("node-fetch");
 const { AUTH } = require(`${basePath}/src/config.js`);
 
-function fetchWithRetry(data, url, method) {
+function fetchWithRetry(url, options) {
   return new Promise((resolve, reject) => {
-    const fetch_retry = (_data) => {
-      let options = {
-        method: method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: AUTH,
-        },
-        body: _data,
-      };
+    const fetch_retry = () => {
+      options.headers.Authorization = AUTH;
 
       return fetch(url, options)
         .then((res) => {
@@ -33,10 +27,10 @@ function fetchWithRetry(data, url, method) {
         .catch((error) => {
           console.error(`CATCH ERROR: ${error}`);
           console.log("Retrying");
-          fetch_retry(_data);
+          fetch_retry();
         });
     };
-    return fetch_retry(data);
+    return fetch_retry();
   });
 }
 

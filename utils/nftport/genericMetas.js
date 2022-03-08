@@ -18,20 +18,21 @@ let data = JSON.parse(rawdata);
 
 console.log("Starting generic metadata creation.");
 
-for (let item in data) {
+for (let item of data) {
   const genericImage = GENERIC_IMAGE[Math.floor(Math.random() * GENERIC_IMAGE.length)];
   item.name = `${GENERIC_TITLE} #${item.custom_fields.edition}`;
   item.description = GENERIC_DESCRIPTION;
   item.file_url = genericImage;
+  item.image = genericImage;
   delete item.attributes;
   delete item.custom_fields.dna;
 
   fs.writeFileSync(
-    `${buildDir}/genericJson/${item}`,
+    `${buildDir}/genericJson/${item.custom_fields.edition}.json`,
     JSON.stringify(item, null, 2)
   );
 
-  console.log(`${item} copied and updated!`);
+  console.log(`${item.name} copied and updated!`);
 }
 
 fs.writeFileSync(

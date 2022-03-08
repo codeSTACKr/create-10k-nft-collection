@@ -12,12 +12,17 @@ const retrieveContract = async () => {
       `${basePath}/build/contract/_deployContractResponse.json`
     );
     const deployData = JSON.parse(rawDeployData);
-    if (deployData.response === "OK" && deployData.error === null) {
+    if (deployData.response === "OK") {
       const txnHash = deployData.transaction_hash;
       const chain = CHAIN.toLowerCase();
       const url = `https://api.nftport.xyz/v0/contracts/${txnHash}?chain=${chain}`;
-
-      const response = await fetchWithRetry(null, url, "GET");
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const response = await fetchWithRetry(url, options);
       fs.writeFileSync(
         `${basePath}/build/contract/_contract.json`,
         JSON.stringify(response, null, 2)
@@ -31,7 +36,7 @@ const retrieveContract = async () => {
       console.log(`Contract ${CONTRACT_NAME} deployment failed`);
     }
   } catch (error) {
-    console.log(`Contract ${CONTRACT_NAME} deployment failed`);
+    console.log(`CATCH: Contract ${CONTRACT_NAME} deployment failed`, `ERROR: ${error}`);
   }
 };
 
