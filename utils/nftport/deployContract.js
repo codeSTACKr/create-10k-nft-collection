@@ -13,6 +13,8 @@ const {
   CONTRACT_TYPE,
   MINT_TO_ADDRESS,
   METADATA_UPDATABLE,
+  ROYALTY_SHARE,
+  ROYALTY_ADDRESS,
 } = require(`${basePath}/src/config.js`);
 
 const deployContract = async () => {
@@ -38,7 +40,9 @@ const deployContract = async () => {
       symbol: CONTRACT_SYMBOL,
       owner_address: MINT_TO_ADDRESS,
       type: CONTRACT_TYPE,
-      metadata_updatable: METADATA_UPDATABLE
+      metadata_updatable: METADATA_UPDATABLE,
+      royalties_share: ROYALTY_SHARE,
+      royalties_address: ROYALTY_ADDRESS,
     };
     const options = {
       method: "POST",
