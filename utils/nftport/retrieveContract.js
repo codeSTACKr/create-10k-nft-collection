@@ -2,7 +2,7 @@ const basePath = process.cwd();
 const fs = require("fs");
 
 const {
-  fetchWithRetry,
+  fetchNoRetry,
 } = require(`${basePath}/utils/functions/fetchWithRetry.js`);
 const { CHAIN, CONTRACT_NAME } = require(`${basePath}/src/config.js`);
 
@@ -22,7 +22,7 @@ const retrieveContract = async () => {
           "Content-Type": "application/json",
         },
       };
-      const response = await fetchWithRetry(url, options);
+      const response = await fetchNoRetry(url, options);
       fs.writeFileSync(
         `${basePath}/build/contract/_contract.json`,
         JSON.stringify(response, null, 2)

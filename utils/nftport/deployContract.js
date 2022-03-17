@@ -4,7 +4,7 @@ const fs = require("fs");
 const yesno = require('yesno');
 
 const {
-  fetchWithRetry,
+  fetchNoRetry,
 } = require(`${basePath}/utils/functions/fetchWithRetry.js`);
 const {
   CHAIN,
@@ -51,7 +51,7 @@ const deployContract = async () => {
       },
       body: JSON.stringify(contract),
     };
-    const response = await fetchWithRetry(url, options);
+    const response = await fetchNoRetry(url, options);
     fs.writeFileSync(`${basePath}/build/contract/_deployContractResponse.json`, JSON.stringify(response, null, 2));
     if(response.response === "OK") {
       console.log(`Contract ${CONTRACT_NAME} deployment started.`);
