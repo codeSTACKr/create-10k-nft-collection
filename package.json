@@ -17,6 +17,8 @@
     "rarity": "node utils/rarity",
     "rarity_md": "node utils/functions/getRarity_fromMetadata",
     "rarity_rank": "node utils/functions/rarity_rank.js",
+    "add_rarity_layer": "node utils/functions/add_rarity_layer.js",
+    "merge_rarity_layer": "node utils/functions/merge_rarity_layer.js",
     "preview": "node utils/preview.js",
     "pixelate": "node utils/pixelate.js",
     "update_info": "node utils/update_info.js",

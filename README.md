@@ -61,6 +61,16 @@ $ npm run rarity_rank
 
 - Provides ranking details through a user interface after calculating using the codeSTACKr Rarity command.
 
+Rarity Layer (codeSTACKr): 
+```
+$ npm run add_rarity_layer
+```
+
+- Adds an additional layer for rarity decals based on the rarity rating assigned by the rarity calculation. (It requires the rarity metadata file to have been generated.)
+- Configurable via `rarity_layer/config.js` and uses assets relative to this directory.
+- It creates new files in the image directory in build directory with a distinct name e.g. `1_.png, 2_.png...` to allowing you to preview the results and rerun the command with a different configuration if the results are unsatisfactory.
+- Run `npm run merge_rarity_layer` to finalize.
+
 Update Info: 
 ```
 $ npm run update_info
