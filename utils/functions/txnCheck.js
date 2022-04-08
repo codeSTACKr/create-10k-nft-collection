@@ -17,7 +17,7 @@ async function txnCheck(url) {
     await page.waitForSelector("#ContentPlaceHolder1_maintable");
     
     try {
-      let cardText = await page.$eval("#ContentPlaceHolder1_maintable .row:nth-child(4) div:nth-child(2)", (text) => text.textContent);
+      let cardText = await page.$eval("#ContentPlaceHolder1_maintable .row:nth-child(3) div:nth-child(2)", (text) => text.textContent);
       await browser.close();
       resolve(cardText);
     } catch (error) {
