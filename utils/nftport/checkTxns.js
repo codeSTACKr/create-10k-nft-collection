@@ -37,7 +37,7 @@ async function main() {
             ? txnData.mintData.response
             : txnData.updateData.response;
         const err =
-          dir === "minted" ? txnData.mintData.error : txnData.updateData.error;
+          (dir === "minted" ? txnData.mintData.error : txnData.updateData.error) || null;
         const verified =
           dir === "minted"
             ? txnData.mintData.transaction_verified

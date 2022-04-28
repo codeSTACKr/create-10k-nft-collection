@@ -84,7 +84,7 @@ async function reveal() {
         const revealedFile = fs.readFileSync(revealedFilePath);
         if (revealedFile.length > 0) {
           const revealedFileJson = JSON.parse(revealedFile);
-          if (revealedFileJson.updateData.response !== "OK" || revealedFileJson.updateData.error !== null) {
+          if (revealedFileJson.updateData.response !== "OK") {
             throw "not revealed";
           } else if(revealedFileJson.updateData.transaction_verified === true) {
             console.log(`${meta.name} already revealed.`);
