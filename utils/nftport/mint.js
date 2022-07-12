@@ -17,6 +17,7 @@ const {
   CONTRACT_ADDRESS,
   MINT_TO_ADDRESS,
   CHAIN,
+  AUTH,
   GENERIC,
 } = require(`${basePath}/src/config.js`);
 const _limit = RateLimit(1); // Currently, minting is limited to 1/second.
@@ -112,6 +113,7 @@ async function main() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": AUTH,
           },
           body: JSON.stringify(mintInfo),
         };
