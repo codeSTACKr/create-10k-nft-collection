@@ -48,7 +48,7 @@ const CONTRACT_NAME = 'CRYPTOPUNKS';
 const CONTRACT_SYMBOL = 'CP';
 const CONTRACT_TYPE = 'erc721';
 const MINT_TO_ADDRESS = 'YOUR WALLET ADDRESS HERE';
-const CHAIN = 'rinkeby';
+const CHAIN = 'goerli';
 const METADATA_UPDATABLE = true; // set to false if you don't want to allow metadata updates after minting
 const ROYALTY_SHARE = 1000; // Percentage of the token price that goes to the royalty address. 100 bps = 1%
 const ROYALTY_ADDRESS = "0xd8B808A887326F45B2D0cd999709Aa6264CeF919"; // Address that will receive the royalty
