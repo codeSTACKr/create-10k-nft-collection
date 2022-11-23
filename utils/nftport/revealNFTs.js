@@ -84,7 +84,7 @@ async function reveal() {
         const revealedFile = fs.readFileSync(revealedFilePath);
         if (revealedFile.length > 0) {
           const revealedFileJson = JSON.parse(revealedFile);
-          if (revealedFileJson.updateData.response !== "OK" || revealedFileJson.updateData.error !== null) {
+          if (revealedFileJson.updateData.response !== "OK") {
             throw "not revealed";
           } else if(revealedFileJson.updateData.transaction_verified === true) {
             console.log(`${meta.name} already revealed.`);
@@ -176,8 +176,8 @@ async function reveal() {
 if (START) {
   reveal();
 } else {
-  if(CHAIN === 'rinkeby') {
-    console.log('Rinkeby is not supported for checking ownership of NFTs.');
+  if(CHAIN === 'goerli') {
+    console.log('Goerli is not supported for checking ownership of NFTs.');
     process.exit(1);
   }
   setInterval(checkOwnedNFTs, INTERVAL);

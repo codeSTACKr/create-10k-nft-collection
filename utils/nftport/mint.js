@@ -61,10 +61,7 @@ async function main() {
       const mintedFile = fs.readFileSync(mintFile);
       if (mintedFile.length > 0) {
         const mintedMeta = JSON.parse(mintedFile);
-        if (
-          mintedMeta.mintData.response !== "OK" ||
-          mintedMeta.mintData.error !== null
-        ) {
+        if (mintedMeta.mintData.response !== "OK") {
           console.log(
             `Response: ${mintedMeta.mintData.response}`,
             `Error: ${mintedMeta.mintData.error}`,
@@ -128,7 +125,7 @@ async function main() {
           JSON.stringify(combinedData, null, 2)
         );
 
-        if (mintData.response !== "OK" || mintData.error !== null) {
+        if (mintData.response !== "OK") {
           console.log(
             `Minting ${meta.name} failed :(`,
             `Response: ${mintData.response}`,
