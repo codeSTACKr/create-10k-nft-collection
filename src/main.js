@@ -103,6 +103,10 @@ const layersSetup = (layersOrder) => {
       layerObj.options?.["bypassDNA"] !== undefined
         ? layerObj.options?.["bypassDNA"]
         : false,
+    excludeMetadata:
+      layerObj.options?.["excludeMetadata"] !== undefined
+        ? layerObj.options?.["excludeMetadata"]
+        : false,
   }));
   return layers;
 };
@@ -173,10 +177,13 @@ const addMetadata = (_dna, _edition) => {
 
 const addAttributes = (_element) => {
   let selectedElement = _element.layer.selectedElement;
-  attributesList.push({
-    trait_type: _element.layer.name,
-    value: selectedElement.name,
-  });
+
+  if(!_element.layer.excludeMetadata){
+    attributesList.push({
+      trait_type: _element.layer.name,
+      value: selectedElement.name,
+    });
+  }
 };
 
 const loadLayerImg = async (_layer) => {
@@ -224,6 +231,7 @@ const constructLayerToDna = (_dna = "", _layers = []) => {
       name: layer.name,
       blend: layer.blend,
       opacity: layer.opacity,
+      excludeMetadata: layer.excludeMetadata,
       selectedElement: selectedElement,
     };
   });
